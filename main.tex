@@ -1,0 +1,57 @@
+\documentclass[12pt, twoside]{article}
+
+\title{A Lattice Boltzmann Method \\ On SpiNNaker }
+\author{Yuan Feng (UUN: s1909558)}
+
+% include files that load packages and define macros
+\input{includes/includes} % various packages needed for maths etc.
+\input{includes/notation} % short-hand notation and macros
+
+\setlength{\parindent}{5ex}
+
+\begin{document}
+\input{title/title.tex}
+
+\newpage
+\begin{abstract}
+
+
+Neural Network based artificial intelligence has gain popularity in the past years. The bio-inspired idea also led to an increasing research interests for new hardware. Consequently, the Spiking Neural Network Architecture (SpiNNaker) was invented by the European leading research groups. It has a neuromorphic architecture with a biology-inspired hardware design with over a million cores, which not only enable the large scale neural simulation but also provide new opportunities for High-Performance computing, such as Computational Fluid Dynamics (CFD). In this project, we take the hardware specificity as an opportunity by porting a CFD algorithm, the lattice Boltzmann method, to the SpiNNaker platform to investigate the scaling ability and compare it with a standard serial implementation on normal CPU. To do this, we: (a) implement a basic lattice Boltzmann method on SpiNNaker platform with over 10,000 cores; (b) demonstrated that the lattice Boltzmann method on the SpiNNaker platform has good performance of speed and advantage in week-scaling.
+
+\end{abstract}
+
+
+
+\newpage
+\renewcommand{\abstractname}{Acknowledgements}
+\begin{abstract}
+
+Acknowledgements
+
+\end{abstract}
+
+\newpage
+\tableofcontents
+%\listoffigures
+%\listoftables
+
+\newpage
+\input{introduction/introduction.tex}
+\newpage
+\input{background/background.tex}
+\newpage
+\input{project/project.tex}
+\newpage
+\input{evaluation/evaluation.tex}
+\newpage
+\input{conclusion/conclusion.tex}
+\newpage
+\input{appendix/appendix.tex}
+
+\newpage
+%\bibliographystyle{alpha}
+%\bibliographystyle{ieeetr}
+\bibliographystyle{IEEEtran}
+\bibliography{bibs/references}
+
+\end{document}

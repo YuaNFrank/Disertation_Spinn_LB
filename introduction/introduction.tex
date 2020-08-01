@@ -1,0 +1,88 @@
+\section{Introduction}
+
+\subsection{Motivation}
+
+% Almost 70 years after MADALINE \cite{adaline}, the first successful application of an artificial neural network that predicted and corrected bit streams traversing a phone line, the interest in artificial neural networks and Artificial Intelligence (AI) in general has grown exponentially. Parallel to the ever-improving research, industry applications of neural networks have been numerous, ranging from stock market predictions \cite{smp} to self-driving cars as early as 1989 \cite{alvinn}. These applications continue to create new business opportunities and thus investments have been flowing into AI over the past years at unprecedented levels. Moreover, this trend is predicted to continue with enterprise market revenue expected to be multiplied by 20 by 2025; see Fig.~\ref{fig:ai-proj}. As a direct consequence, research is prolific as observed in Fig.~\ref{fig:ai-papers} and funding has grown significantly. Indeed, The European Union (EU) is even encouraging these investments and is aiming to reach 20 billion euros worth of both public and private investments in AI in 2020. \cite{ai-invest}.
+
+Since 70 years ago, MADALINE\cite{adaline}, the first artificial neural network application, predicted the bit streams traversing a phone line, the interest around artificial neural network and artificial intelligence (AI) has grown continuously; see Fig.~\ref{fig:ai-papers}. Apart from the research in the academia, enterprise neural network applications has also skyrocket over these years including automatic speech. recognition\cite{yu2016automatic}, self-driving car\cite{maqueda2018event}. This trend was predicted to continue at least by the end of 2025 \cite{ai-invest}. \\
+
+\begin{figure}[!ht]
+   \centering
+   \begin{subfigure}[b]{0.5\textwidth}
+       \includegraphics[width=\textwidth]{figures/ai_enterprise.png}
+       \caption{Enterprise AI market revenue 2016-2025 (image from \cite{ai-proj}).}
+       \label{fig:ai-proj}
+   \end{subfigure}%
+   ~
+   \begin{subfigure}[b]{0.5\textwidth}
+       \includegraphics[width=\textwidth]{figures/ai_paper.png}
+       \caption{AI papers published per year (image from \cite{ai-papers}).}
+       \label{fig:ai-papers}
+   \end{subfigure}
+\end{figure}
+
+To accelerate the field of neuroscience, computing and brain-related medical research, some funding has been allocate to the Human Brain Project (HBP) \cite{hbp}. The HBP project has been broke down to several sub-project. One of them is to build a novel computer with a design inspired by the human brain, which finally led to the Spiking Neural Network Architecture (SpiNNaker) project and a million-core machine (seen in Fig.~\ref{fig:cluster}). Correspondingly, Under the SpiNNaker project, researchers also build a suite of software to support the SpiNNaker hardware and software development.\\
+
+\begin{figure}[!tb]
+   \centering
+       \includegraphics[width=0.7\textwidth]{figures/cluster.png}
+       \caption{The 500,000-core SpiNNaker \textit{102} machine at the University of Manchester (image from \cite{spinn-core}).}
+       \label{fig:cluster}
+\end{figure}
+
+
+Nowadays, the amount of data has grown increasing large, traditional computer architectures do not scale as the Moore's law \cite{schaller1997moore}. While parallelism is regarded as an option to keep the scaling, the SpiNNaker hardware was designed to be massively distributed and parallel. Thus the SpiNNaker hardware has the potential to be used as a parallel computing solution. As opposite to the traditional hardware, SpiNNaker has the following hardware features:
+
+\begin{itemize}
+\item \textbf{Manycore architecture}: though modern CPUs start to have mutiple cores to gain some parallelism, the number of cores in a CPU is usually less than 10. On the opposite, a type Spinn-5 SpiNNaker board has 48 chips, which contains hundreds of ARM cores \cite{5th-summit} in total.
+
+\item \textbf{Communication model}: the SpiNNaker cores communicate by sending message via UDP/IP \cite{ws6} and UDP/IP do not guarantee the delivery. Though it is the developers' responsibility to make sure the correctness, the developers do not need to worry about the dead-lock. It is designed as so because in a real human brain a neuron does not get any an acknowledgement when the communication is done \cite{spinnaker}.
+
+\item \textbf{Communication throughput}: extra performance might be gain from the reduce of the message size and more message can be process in the same amount of time\cite{furber2012overview}. Their link can transfer up to 31.25M byte/s, which means the links can handle 3M packets per second \cite{ws6}.\\
+\end{itemize}
+
+Some further background information about the SpiNNaker platform would be covered in section \ref{sec:bg}. \\
+
+In a word, the SpiNNaker has the full potential as a supercomputer. \\
+ 
+On the other side, computational fluid dynamics (CFD) has been benefit from the traditional computers to solve real-world engineering problems, including aerospace engineering, meteorology, etc. Lattice Boltzmann method (LBM \ref{sec:lbmb}) is a CFD model which is recognized\cite{lbmmbook} as: (1) easy to apply to complex domain (2) No need to solve the Laplace equation (3) More importantly for this project, being naturally adapted to parallel processing due to the locality and explicit nature of the method. \\
+ 
+LBM has been implemented on different parallel platforms including MPI\cite{he1999three}, GPU\cite{rogers1990upwind}, OpenMP\cite{massaioli2002achieving}, etc. As we discussed above, the SpiNNaker has the ability to compute in massively parallel and it is reasonable that we can get potential high performance and scalability from SpiNNaker hardware on the LBM simulation tasks.
+\\
+
+
+\subsection{Objectives} \label{sec:Obj}
+
+Firstly, we can define our objective of this projects as follow:\\
+
+\begin{quote}
+\textit{Implementing a basic lattice Boltzmann method simulation on the SpiNNaker platform; and investigate its speed performance and scalability. \\
+}\end{quote}
+
+% KS: In point one there are two separate points which should be discussed seaparately. First, there is the implementation of the algirthm. Second, there
+% is the use of a standard test problem to check that the implementation is
+% working correctly. A wide range of test problems could be used.
+
+% KS: There needs to be more here. It's not just a question of implementation. There
+% needs to be some critical evaluation of ease-of-use, performance, and so on. 
+% to add to KS. you need to discuss how your going to compare. speed, scale? energy? accuracy?
+
+To break down the mission, we firstly need to implement a basic lattice Boltzmann method on the SpiNNaker. Even before that, we need a standard implementation on CPU, which can be more easily to understand and porting the algorithm; and we can also further evaluate the correctness, accuracy and compare the performance with this CPU implementation.\\
+
+Secondly, we need to choose a pre-defined problem as the test problem from a wide range of the problems. As the test problem, it need to be simple, generic and easy to check the correctness. To choose it, we take LBM model and the boundary condition into consideration, and, finally, a two dimensions and nine vectors (D2Q9) model with a periodic condition problem described by Minion and Brown \cite{minion1997performance} was chosen. It is simple -- it has two dimensions instead of three, generic -- nine vectors need reasonable communication, and easy to check the correctness -- with the mentioned initial condition, there will be a turbulence in a fix step and we can check it.\\
+
+Finally, after implementing the simulation on SpiNNaker, we will to evaluate correctness and accuracy the simulation result by compare the numbers in quantitatively. After we confirm the correctness, them some experiment would be focus on optimization the communication and bench mark the result with the standard CPU implementation on speed-ups and scalability.\\
+
+\subsection{Contributions}
+
+The contributions from this project are twofold:\\
+
+\begin{itemize}
+\item \textbf{A simple lattice Boltzmann implementation on CPU}: we firstly built a standard serial implementation of a pre-defined lattice Boltzmann scenario described by Minion and Brown \cite{minion1997performance}. Details in \ref{sec:impl}. \\
+
+\item \textbf{A simple lattice Boltzmann implementation on SpiNNaker:} after we implemented the simulation on CPU, we used the CPU implementation as a reference to implement the same simulation on SpiNNaker platform with some of the SpiNNaker software development kit. Details in \ref{sec:impl}\\
+
+\item \textbf{An investigation on the speed performance and scalability}: we demonstrate that lattice Boltzmann on SpiNNaker platform offers better speed performance in some large scale when compared to CPU and it also has a good scalability on week-scaling. We bench-marked two implementations of the lattice Boltzmann method scenario: the first one is the standard implementation of on Cirrus and second one is a implementation on SpiNNaker mentioned above. The observation shows that lattice Boltzmann program can gain 5x speed-up over a certain scale. Details in section \ref{sec:eval}.
+\end{itemize}
+
+

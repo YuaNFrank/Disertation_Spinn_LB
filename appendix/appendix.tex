@@ -1,0 +1,43 @@
+\appendix
+\section{Appendix - Initialization function in Serial C} \label{app:a}
+\begin{minted}{C}
+double U_0 = 0.01;
+double K = 30.0;
+double delta = 0.05;
+/*
+ * Init the velocity u, v = (u_x, u_y)
+ * 
+ * ydim = xdim = N = 128
+ * K = 30 / N
+ * delta = 0.05
+ * 
+ * u = tanh( K (y - 0.25 * ydim) ) for y <= 0.5 * ydim 
+ * u = U_0 tanh( K (0.75 * ydim - y) ) for y >  0.5 * ydim
+ * 
+ * v = delta sin( 2pi *x / xdim )
+*/
+void initRho_N_U(double (*u_x)[ydim + 2], double (*u_y)[ydim + 2], double (*rho)[ydim + 2])
+{
+    for (int i = 1; i < xdim + 1; i++)
+    {
+        for (int j = 1; j < ydim + 1; j++)
+        {
+            double x_temp, y_temp;
+            x_temp = 1.0 * (double)(i - 1) / (double)xdim;
+            y_temp = 1.0 * (double)(j - 1) / (double)ydim; // scale the i and j to make 0 < i,j < 1
+
+            if (y_temp <= 0.5)
+            {
+                u_x[i][j] = U_0 * tanh(K * (y_temp - 0.25));
+            }
+            else
+            {
+                u_x[i][j] = U_0 * tanh(K * (0.75 - y_temp));
+            }
+
+            u_y[i][j] = U_0 * delta * sin(2.0 * M_PI * (x_temp + 0.25));
+            rho[i][j] = 1.0;
+        }
+    }
+}
+\end{minted}

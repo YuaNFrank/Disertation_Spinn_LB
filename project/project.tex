@@ -92,15 +92,35 @@ position_data_t position_data = data_specification_get_region(POSITION, data);
 \subsubsection{Design Consideration}
 The major job of the lattice edge except connecting two lattice cells is providing a way that the lattice cell can get the vertex on the other end of this edge in a given direction. So that each lattice can get the routing information (routing keys) of its eight neighbours with knowing the direction. 
 \subsubsection{Final Implementation}
-\begin{figure}[!tb]
+In the implementation, the \textit{Lattice Edge class} inherit from the \textit{MachineEdge}, which provided a way to record the pre-vertex and post-vertex, from the \textbf{PACMAN} library. Then we introduced another attribute, \textbf{compass}, to record the relative position of the pre-vertex; see Fig.~\ref{fig:edge}.
+\begin{figure}[tb]
    \centering
-       \includegraphics[width=0.8\textwidth]{figures/edge.jpg}
+       \includegraphics[width=0.7\textwidth]{figures/edge.jpg}
        \caption{A lattice cell A connected by another lattice B via a lattice edge with the compass being "W". The lattice A then can get the routing key from its pre\_vertex, B.}
        \label{fig:edge}
 \end{figure}
 
-\subsection{The Computational Graph} \label{sec:tcg} %TODO: a comparison between the spinnaker computational graph and the lattice boltzmann boundary condition
+\subsection{The Computational Graph} \label{sec:tcg} 
 \subsubsection{Design Consideration}
+In the selected test problem from Minion and Brown\cite{minion1997performance}, the boundary condition we applied for this project is a periodic condition. In the C implementation, what we did to implement the periodic condition is halo-swapping; see Fig.~\ref{fig:haloswap}. 
+
+
+\begin{figure}[!tb]
+
+\begin{subfigure}[b]{1\textwidth}
+       \centering
+       \includegraphics[width=1\textwidth]{figures/haloswap.png}
+       \caption{A periodic condition in M$\times$N lattice Boltzmann implemented by halo-swapping. We apply this method in our serial C implementation.}
+       \label{fig:haloswap}
+   \end{subfigure}
+
+   \begin{subfigure}[b]{1\textwidth}
+       \includegraphics[width=\textwidth]{figures/2dfabric.png}
+       \caption{A periodic condition in 3$\times$3 lattice Boltzmann implemented by connecting the lattice periodically via lattice edge. We apply this method in the SpiNNaker implementation.}
+       \label{fig:}
+   \end{subfigure}
+\end{figure}
+
 \subsubsection{Final Implementation}
 
 
@@ -108,6 +128,7 @@ The major job of the lattice edge except connecting two lattice cells is providi
 \subsubsection{Design Consideration}
 To initialize the parameters for the lattice Boltzmann, there are two different way in general. The first one is initialization on host (in Python), and the other one is initialization on SpiNNaker (in C).
 \subsubsection{Final Implementation}
+
 
 \subsection{Computation Implementation} \label{sec:cp}
 \subsubsection{Design Consideration}

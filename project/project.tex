@@ -1,14 +1,14 @@
 
 
 \newpage
-\section{Design and Implementation}
+\section{Design and Implementation} \ref{sec:dai}
 This section will be discussing the main contribution of this project: a implementation of lattice Boltzmann method on SpiNNaker.  \\
 
 All the source code is available at: \url{https://github.com/YuaNFrank/SpiNN_LB}.
 \subsection{Implementation Overview}
 
 As we discussed at \ref{sec:sdw}, in general SpiNNaker development workflow, the first thing we did is to define the computation graph in Python. We will discuss how we define the lattice vertex (\ref{sec:tlc}), how we define our edge (\ref{sec:tle}), and how we connect them together as a graph (\ref{sec:tcg}). All these steps are implemented in Python API.
-
+1       
 Then on the computation side, as discussed at \ref{sec:lbmb}, there are five step for a lattice Boltzmann method in general. While the first four steps do not involve communication, and can be calculate locally for each lattice vertex (discussed at \ref{sec:cp}), the last step, the streaming step, is where the communication happens, which we will focus on at \ref{sec:ssc}. These computation-wise code is written in C.
 
 \subsection{The Lattice Cell} \label{sec:tlc}
@@ -44,48 +44,14 @@ In the final implementation, we defined the discussed data regions in the \texti
     \item \textbf{Result Recording:} we do not need to get data from result recording since it is for the result.
 \end{itemize}
 
-After all the data are acquired, we get then reserve corresponding memory and write the data into the SDRAM of each SpiNNaker core; see code code block \ref{lst:code1}. Correspondingly, in the C file, we also need to get the data from the SDRAM; see code block \ref{lst:code2}. The \ref{lst:general} shows a piece of code from our final implementation on how to reserve memory for the position data and write the data into the SDRAM followed by how to read the written data from the SDRAM during simulation in C.
-
-\begin{figure}[!ht]
-\setcounter{tmp}{\thefigure}
-\setcounter{figure}{\thelstlisting}
-\captionsetup{list=no,name=Listing}
-\begin{subfigure}{\linewidth}
-\begin{lstlisting}
-# spec is the handle for data specification API
-# reserve memory for a data region, POSITION, with a size, POSITION_DATA_SIZE
-spec.reserve_memory_region(
-            region=self.DATA_REGIONS.POSITION.value,
-            size=self.POSITION_DATA_SIZE, label="position")
-
-# switch the cursor to the data region of REGION
-spec.switch_write_focus(
-            region=self.DATA_REGIONS.POSITION.value
-        )
-# write the position data (x,y) in the device 
-spec.write_value(int(self.x_position))
-spec.write_value(int(self.y_position))
-\end{lstlisting}
-\caption{An example of how to reserve memory for the position data region and write data to the device in Python.\\}
-\label{lst:code1}
-\end{subfigure}
-\begin{subfigure}{\linewidth}
-\begin{lstlisting}
-// get the address starting the DTCM from the SRAM on this SpiNNaker core
-data = data_specification_get_data_address();
-
-// get position data from the DTCM
-position_data_t position_data = data_specification_get_region(POSITION, data);
-\end{lstlisting}
-\caption{An example of how to read the position data in C.}
-\label{lst:code2}
-\end{subfigure}
-\caption{An exmaple of how to pass the position data to SpiNNaker.}
-\label{lst:general}
-\addcontentsline{lol}{lstlisting}{\protect\numberlineAn example of how to pass the position data to SpiNNaker.}
-\stepcounter{lstlisting}
-\setcounter{figure}{\thetmp}
+After all the data are acquired, we get then reserve corresponding memory and write the data into the SDRAM of each SpiNNaker core; see the upper part of Fig.~\ref{fig:write_data}. Correspondingly, in the C file, we also need to read the data from the SDRAM before the simulation; see the bottom part of Fig.\ref{fig:write_data}. The Fig.~\ref{fig:write_data} shows how we reserve memory for the different data regions and write the data into the SDRAM followed by how to read the written data from the SDRAM during runtime in C.
+\begin{figure}[tb]
+   \centering
+       \includegraphics[width=1\textwidth]{figures/write_data.png}
+       \caption{A lattice cell A connected by another lattice B via a lattice edge with the compass being "W". The lattice A then can get the routing key from its pre\_vertex, B.}
+       \label{fig:write_data}
 \end{figure}
+
 
 
 \subsection{The Lattice Edge} \label{sec:tle}
@@ -102,31 +68,55 @@ In the implementation, the \textit{Lattice Edge class} inherit from the \textit{
 
 \subsection{The Computational Graph} \label{sec:tcg} 
 \subsubsection{Design Consideration}
-In the selected test problem from Minion and Brown\cite{minion1997performance}, the boundary condition we applied for this project is a periodic condition. In the C implementation, what we did to implement the periodic condition is halo-swapping; see Fig.~\ref{fig:haloswap}. 
+In the selected test problem from Minion and Brown\cite{minion1997performance}, the boundary condition we applied for this project is a periodic condition. In the C implementation, we implemented the periodic condition is halo-swapping; see Fig.~\ref{fig:haloswap}. The periodic condition is explicitly applied to the post-collision distribution function $f_i^{*}$ in the streaming step, which introduced extra memory consumption and complexity into the development.
+
+Fortunately, in SpiNNaker, the developers do not implement the halo-swapping to apply to the periodic condition explicitly. Instead, SpiNNaker developers can simply connect the lattices on one fringe to the lattices on the opposite fringe via the implemented \textit{Lattice Edge}; see Fig.~\ref{fig:spinnaker_halo}.
 
 
 \begin{figure}[!tb]
 
 \begin{subfigure}[b]{1\textwidth}
        \centering
-       \includegraphics[width=1\textwidth]{figures/haloswap.png}
+       \includegraphics[width=0.8\textwidth]{figures/haloswap.png}
        \caption{A periodic condition in M$\times$N lattice Boltzmann implemented by halo-swapping. We apply this method in our serial C implementation.}
        \label{fig:haloswap}
    \end{subfigure}
-
    \begin{subfigure}[b]{1\textwidth}
        \includegraphics[width=\textwidth]{figures/2dfabric.png}
        \caption{A periodic condition in 3$\times$3 lattice Boltzmann implemented by connecting the lattice periodically via lattice edge. We apply this method in the SpiNNaker implementation.}
-       \label{fig:}
+       \label{fig:spinnaker_halo}
    \end{subfigure}
 \end{figure}
 
 \subsubsection{Final Implementation}
+As we designed, to implement a periodic condition, we connect the lattice cells periodically via lattice edge; see Algo.~\ref{algo:periodic}.
+
+\begin{algorithm}
+ \caption{The Algorithm to connect the lattice with a periodic condition}
+ \label{algo:periodic}
+ \KwData{Scale in x dimension: X; Scale in y dimension: Y}
+ \For{i in 0...X}{
+    \For {j in 0...Y} {
+       
+    }
+ }
+
+\end{algorithm}
+
+
 
 
 \subsection{Initialize Parameters} \label{sec:ip}
 \subsubsection{Design Consideration}
-To initialize the parameters for the lattice Boltzmann, there are two different way in general. The first one is initialization on host (in Python), and the other one is initialization on SpiNNaker (in C).
+To initialize the parameters for the lattice Boltzmann, there are two different ways in general. The first one is initialization on host (in Python) then passing the initialized parameters into the simulation, and the other one is initialization on SpiNNaker (in C).\\
+
+When initializing parameters in Python on host, we need to compute the parameters in serial nested loops before the SpiNNaker actually run the simulation. On contrast. If we initializing the parameters in SpiNNaker, the parameters would be computed distributively on each individual core. Beside, vanilla Python is commonly regard as being poor in scientific computing, especially in nested loop.\\
+
+It is obvious that initialization in C on the simulation runtime would be faster in speed comparing with initialization in Python in serial. Thus, our first implementation was based on C and compute the initial parameters distributively on each core. \\
+
+However, there are two points in SpiNNaker that we do not take into consideration. The first one is that, as we introduced before, SpiNNaker is using ARM968 cores which have no floating point hardware and we have to use fixed-point arithmetic or a software-based floating-point arithmetic. It introduced some challenges in using mathematical library in C including \textbf{math.h}. The other one is that, as we also introduced before, the SpiNNaker cores have relatively limited ITCM (instruction tight-coupled memory). If we are plan to use mathematical library such as \textbf{math.h}, the library would run out of the limited ITCM. Although it is possible to implement mathematics functions such as \textbf{tanh} by applying the Taylor series, the accuracy and efficiency of the hand-write functions do not satisfy the requirements of this simulation.\\
+
+After carefully reconsider the whole process, we finally decided to implement the initialization on the host in Python and then pass the initialized parameters as data regions to the SpiNNaker device.
 \subsubsection{Final Implementation}
 
 
@@ -135,5 +125,9 @@ To initialize the parameters for the lattice Boltzmann, there are two different 
 \subsubsection{Final Implementation}
 
 \subsection{Streaming Step -- Communication Implementation} \label{sec:ssc}
+\subsubsection{Design Consideration}
+\subsubsection{Implementation}
+
+\subsection{Communication Optimization}
 \subsubsection{Design Consideration}
 \subsubsection{Final Implementation}

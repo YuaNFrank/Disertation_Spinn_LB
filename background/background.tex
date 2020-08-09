@@ -4,34 +4,35 @@
 This section will provide a basic background information of history neuromorphic computing (\ref{sec:sb}) and the SpiNNaker (\ref{sec:sa}) in hardware architecture (\ref{sec:sa}) and software stack (\ref{sec:sss}). Then this section will explain some important conceptions in physics (\ref{sec:PB}) about the lattice Boltzmann method: why it is necessary and how it works. 
 
 
-\subsection{Story in a Nutshell} \label{sec:sb}
+\subsection{History in a Nutshell} \label{sec:sb}
 The vision of \textbf{neuromorphic computing}\cite{mead1980introduction} is to enable a new generation of computer architecture, designing energy-efficient general-purpose computing systems comparable to the human brain. In 1989, Carver Mead from Caltech first introduced the concept of \textit{neuromorphic Engineering} \cite{mead1980introduction}. From 1990 to 2003, the Von Neumann-based CPU industry continued to grow, Moore's Law \cite{schaller1997moore} was reaching its limits, and neuromorphic computing was dormant for more than a decade. In around 2004, the frequency growth of single-core processors slowed down, and IC designers turned to multi-core processors. Academia began to look for alternative technologies to the Von Neumann architecture.\\
 
 In 2004, Kwabena Boahen from Stanford University developed Neurogrid \cite{benjamin2014neurogrid}, an analog circuit-based neural chip. In 2005, the University of Manchester began to develop \textbf{SpiNNaker}, a multicore neural supercomputer based on ARM chips. In the same year, the Europe, the US and IBM started their neuromorphic computing projects: FACETS project \cite{meier2004fast}, SyNAPSE project\cite{park2014impact} and Blue Brain project\cite{gara2005overview}, respectively. \\
 
-In 2013, A 10-year-project, \textbf{Human Brain Project} began in 2013. It aims at building a research infrastructure to help advanced neuroscience, medicine, and computing \cite{hbp}. Although, the SpiNNaker project had started even before the Human Brain Project funded by the \textit{Engineering and Physical Sciences Research Council} (EPSRC), the Human Brain Project bring more funding and brilliant researchers building the 1 mio core SpiNNaker machine since November 2018; see Fig~.\ref{fig:super_machine}.
+In 2013, A 10-year-project, \textbf{Human Brain Project} began in 2013. It aims at building a research infrastructure to help advanced neuroscience, medicine, and computing \cite{hbp}. Although, the SpiNNaker project had started even before the Human Brain Project funded by the \textit{Engineering and Physical Sciences Research Council} (EPSRC), the Human Brain Project bring more funding and brilliant researchers building the 1 million core SpiNNaker machine since November 2018; see Fig~.\ref{fig:super_machine}.
 
 \begin{figure}[!tb]
    \centering
        \includegraphics[width=0.8\textwidth]{figures/super_machine.jpg}
-       \caption{Since November 2018: The 1 mio core SpiNNaker HBP Platform machine((image from \cite{super_machine})).}
+       \caption{Since November 2018: The 1 million core SpiNNaker HBP Platform machine((image from \cite{super_machine})).}
        \label{fig:super_machine}
 \end{figure}
 
 
 
 \subsection{SpiNNaker Architecture} \label{sec:sa}
-\subsubsection{Chip Architecture}
+In this subsection, we will illustrate the basic architecture of the SpiNNaker.
+\subsubsection{Chip Architecture} \label{sec:ca}
 \begin{figure}[!tb]
    \centering
        \includegraphics[width=0.8\textwidth]{figures/spinn_labeled_bw.png}
        \caption{An 18 cores SpiNNaker chip ((image from \cite{spinn-core})).}
        \label{fig:spinn-core}
 \end{figure}
-Fig.~\ref{fig:spinn-core} shows the die plot of an 18 ARM cores SpiNNaker chip. It mainly consists of \cite{furber2012overview}:
+Fig.~\ref{fig:spinn-core} shows the die of a SpiNNaker chip that contains 18 cores. It mainly consists of \cite{furber2012overview}:
 
 \begin{itemize}
-    \item \textbf{ARM968 core:} there are 18 ARM968 cores in the chip. Being different from the most cores in the PCs or supercomputer running at $\sim GHz$, ARM968 is a medium-performance computing unit running at 200MHz with 220 DMIPS \cite{furber2012overview}. There are two very limited tightly coupled memory (TCM) blocks: a 64 Kbytes of data tight-coupled memory (DTCM) block and a 32 Kbytes of instruction tight-coupled memory (ITCM) block; see Fig.~\ref{fig:arm_968}. Other controllers including direct memory access (DMA) controller, communication controller, vectored interrupt controller are also built in. A major difference from the most cores in the market is that the ARM968 core do not have floating-point hardware and use fixed-point arithmetic instead. Though I might be more energy-efficient, it bring greater challenge to programmers \cite{furber2012overview}. Luckily, a software floating-point arithmetic is supported, though the performance might be slower and more memory-hungry \cite{spin-chip-resources}.
+    \item \textbf{ARM968 core:} Fig.~\ref{fig:spinn-core} . Being different from the most cores in the PCs or supercomputer running at $\sim GHz$, ARM968 is a medium-performance computing unit running at 200MHz with 220 DMIPS \cite{furber2012overview}. There are two very limited tightly coupled memory (TCM) blocks: a 64 Kbytes of data tight-coupled memory (DTCM) block and a 32 Kbytes of instruction tight-coupled memory (ITCM) block; see Fig.~\ref{fig:arm_968}. Other controllers including direct memory access (DMA) controller, communication controller, vectored interrupt controller are also built in. A major difference from the most cores in the market is that the ARM968 core do not have floating-point hardware and use fixed-point arithmetic instead. Though I might be more energy-efficient, it bring greater challenge to programmers \cite{furber2012overview}. Luckily, a software floating-point arithmetic is supported, though the performance might be slower and more memory-hungry \cite{spin-chip-resources}.
     \begin{figure}[!tb]
    \centering
        \includegraphics[width=1\textwidth]{figures/core.png}
@@ -182,7 +183,7 @@ In general, methods for describing fluid systems can be classified into Molecula
 
 The lattice Boltzmann method (LBM) as a mesoscopic model set in the between the microscopic model and the continuum model. It enjoy the advantages of both the macroscopic and microscopic approaches, and we will introduce both of them next before the LBM.
 
-\subsubsection{Navier-Stokes Equations} \label{sec:nse}
+\subsubsection{Navier-Stokes Equations -- Macroscopic Model} \label{sec:nse}
 In general, a fluid can be viewed as a continuous medium that fills the entire flow field, so that the physical quantities of density, velocity, temperature, etc. can be defined at each point of the flow field and a series of partial differential equations can be established to describe the motion of the fluid. The continuous medium assumption is a fundamental assumption of fluid mechanics and is an approximate treatment of macroscopic fluid structure.\\
 
 Based on the assumption of a continuous medium, the motion of a fluid follows the law of conservation of mass, momentum and energy, which can be mathematically described by a set of partial differential equations Equation.~\ref{equ:NS}:
@@ -233,7 +234,7 @@ scale, the effect of collisional diffusion of momentum between molecules.
 \end{equation}
 
 
-\subsubsection{Molecular Dynamics model} \label{sec:HE}
+\subsubsection{Molecular Dynamics model -- Microscopic Model} \label{sec:HE}
 The continuum models with Navier-Stokes equations do not take into account the microscopic molecular model of the fluid and directly describes the macroscopic physical quantities of the fluid, but the fluid is physically composed of fluid molecules, and the macroscopic motion of the fluid is the result of averaging the thermal motion of the microscopic molecules. Therefore, if the microscopic motion of the fluid molecules can be known, the macroscopic physical quantities of the fluid can theoretically be obtained by averaging. This is the basic idea of the molecular dynamics model. The molecular dynamics model looks at the microscopic molecular motion of a fluid, studies the time evolution of the spatial position and velocity of the fluid molecules, etc., and uses statistical methods to obtain information on the macroscopic flow from the microscopic information of the molecules.\\
 
 In general, Hamiltonian equations are applied to this model \cite{salmon1988hamiltonian}, but the reasoning is beyond the scope of this project. With the idea of describing the macroscopic physical quantities by averaging the microscopic particles, we can then move to the kinetic theory of gas.
@@ -253,7 +254,7 @@ Here, $r$ is the distance between two molecular and $\sigma$ is the diameter of 
 
 However, for gas systems consisting of a huge number of molecules ($10^{23}$), tracking the motion of each molecule based on the forces between molecules as in molecular dynamics is impractical for most systems. Applying statistical methods to study the statistical characteristics of these discrete molecules, such as the average number of molecules in a small volume unit and over small time intervals, the average velocity, the average energy, and other relevant physical quantities, is a feasible approach, and this is the fundamental point for kinetic theory of gas and the Boltzmann Equation.
 
-\subsubsection{Boltzmann Equation}
+\subsubsection{Boltzmann Equation -- Mesoscopic Model}
 Ludwig Eduard Boltzmann (1844-1906), the Austrian physicist explains and predicts how the properties of atoms and molecules (microscopic properties) determine the phenomenological (macroscopic) properties of mater including viscosity, thermal conductivity\cite{lbmmbook}. He proposed and developed the Boltzmann equation, which then become the starting point of the kinetic theory of gas.\\
 
 To describe the Boltzmann equation, in any macroscopic system, the microscopic motion of each molecule follows the laws of mechanics, so as long as the individual motion of a large number of particles, you can determine the macroscopic parameters of the whole system, which is the basic starting point of molecular dynamics; from another perspective, instead of determining the state of motion of each molecule, we can find the probability of each molecule in a certain state, which can be obtained by statistical methods. This is the basic idea behind the Boltzmann equation, which is the equation used in statistical mechanics to express the evolution of an non-equilibrium distributed function; see Equation ~\ref{equ:BE}.

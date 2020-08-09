@@ -41,3 +41,33 @@ void initRho_N_U(double (*u_x)[ydim + 2], double (*u_y)[ydim + 2], double (*rho)
     }
 }
 \end{minted}
+\newpage
+\section{Appendix - Initialization function in Serial Python for SpiNNaker} \label{app:b}
+\begin{minted}{Python}
+ex = [0, 1, 0, -1, 0, 1, -1, -1, 1]
+ey = [0, 0, 1, 0, -1, 1, 1, -1, -1]
+
+def initVelocity(x_pos, y_pos):
+    """
+    Init the velocity u, v = (u_x, u_y)
+  
+    ydim = xdim = N = 128
+    K = 30 / N
+    delta = 0.05
+  
+    u = tanh( K (y - 0.25 * ydim) ) for y <= 0.5 * ydim 
+    u = U_0 tanh( K (0.75 * ydim - y) ) for y >  0.5 * ydim
+    v = delta sin( 2pi *x / xdim )
+    """
+    U_0 = 0.01
+    K = 30.0
+    delta = 0.05
+    x_temp = 1.0 * (x_pos) / MAX_X_SIZE_OF_FABRIC
+    y_temp = 1.0 * (y_pos) / MAX_Y_SIZE_OF_FABRIC
+    if y_temp <= 0.5:
+        u_x = U_0 * math.tanh(K * (y_temp - 0.25))
+    else:
+        u_x = U_0 * math.tanh(K * (0.75 - y_temp))
+    u_y = U_0 * delta * math.sin(2 * math.pi * (x_temp + 0.25))
+    return u_x, u_y
+\end{minted}

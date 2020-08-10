@@ -1,3 +1,37 @@
 \section{Result and Evaluation} \label{sec:eval}
-\subsection{Correctness and Accuracy Evaluation}
-\subsection{Performance Evaluation}
+This section discuss the result of the simulation with our implemented lattice Boltzmann method on SpiNNaker. Firstly, the evaluation setup (\ref{sec:es}) including the serial version and SpiNNaker version would be discussed. Then we will discuss the correctness and the accuracy of simulation in different scale at \ref{sec:caae}. Then we will compare the performance in term of speed with the serial implementation in CPU at \ref{sec:perfe}.
+\subsection{Evaluation Setup} \label{sec:es}
+In this project, we used a serial implementation of the test problem in C as the baseline. The serial version would be run on EPCC's facility Cirrus (Intel Xeon E5-2695 (Broadwell)), with no compiler optimization.\\
+
+On the SpiNNaker side, we run our simulation on the SpiNNaker cluster in the University of Manchester, which contains 1,036,800 cores via the SpiNNaker Jupyter Notebook interface. \\
+
+For evaluation, we use three different scale of simulation; see \ref{table:setting}. We will firstly plot the contour graph of the result of those three simulation. Those simulation indicate the same problem but in different resolution. Then we will use the normalized distances L-1 norm, L-2 norm and L-infinite norm  of (1) SpiNNaker version vs. Serial float version; (2) SpiNNaker version vs. Serial double version; (3) Serial float version vs. Serial double version to discuss the correctness and the accuracy of our SpiNNaker implementation.\\
+
+\begin{table}[tb]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+Scale          & 64$\times$64 & 128$\times$128 & 256$\times$256 \\ \hline
+total cores    & 4086         & 16384          & 65536          \\ \hline
+total timestep  & 5120         & 10240          & 20480          \\ \hline
+$\nu$           & 0.000064     & 0.000128       & 0.000256       \\ \hline
+$\tau$           & 0.500192     & 0.500384       & 0.500735       \\ \hline
+\end{tabular}
+\caption{The physical parameters setting in three different scales.}
+\label{table:setting}
+\end{table}
+
+
+For performance, in this project, we focus on speed. To more visually compare the magnitude of the relationship between them, after confirmed the correctness, we do not take physical settings into consideration. In other words, all the experiments of those three scale would run for 12000 time steps. We will compare the total simulation time and the simulation time per time step of the SpiNNaker implementation and serial implementation in the three scales. \\
+
+It should be noted that, in SpiNNaker, we do not take the time spend on loading SpiNNaker hardware configuration into account for the above comparison. We will discuss it in more detail at \ref{sec:ana}.\\
+
+To make the results more plausible, we took the tie value for three executions for every result.\\
+\subsection{Correctness and Accuracy Evaluation} \label{sec:caae}
+
+
+
+\subsection{Performance Evaluation} \label{sec:perfe}
+
+
+\subsection{Limitation Analysis} \label{sec:ana}

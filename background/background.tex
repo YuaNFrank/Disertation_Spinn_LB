@@ -281,14 +281,14 @@ BGK approximation was firstly proposed by Bhatnagar, Gross and Krook in 1954 \ci
 \item \textbf{Be able to reflect the tendency of the system towards equilibrium}
 \end{itemize}
 
-A simple collision term can draw from those two assumption with assuming the effect of a collision is to change the distribution function $f$ so that it tends to an equilibrium distribution $f^{eq}$. Set the rate of change to be proportional to the difference between $f$ and $f^{eq}$, and $\tau$ is the relaxation time. So you can introduce a BGK collision term $\Omega (f)$ at Equation ~\ref{equ:BGKLB}:
+A simple collision term can draw from those two assumption with assuming the effect of a collision is to change the distribution function $f$ so that it tends to an equilibrium distribution $f^{eq}$. Set the rate of change to be proportional to the difference between $f$ and $f^{eq}$, and $\tau$ is the relaxation factor (reverse time). So you can introduce a BGK collision term $\Omega (f)$ at Equation ~\ref{equ:BGKLB}:
 
 \begin{equation}
 \label{equ:BGKLB}
-    \Omega (f) = \tau(f_{eq} - f)
+    \Omega (f) = \frac{(f_{eq} - f)}{\tau}
 \end{equation}
 
-Equation~\ref{equ:BGKLB} is called Boltzmann\_BGK equation \cite{chew1956boltzmann}. The BGK approximation greatly simplifies the solution of the equation.
+Equation~\ref{equ:BGKLB} is called Boltzmann\-BGK equation \cite{chew1956boltzmann}. The BGK approximation greatly simplifies the solution of the equation.
 
 \subsubsection{Lattice Boltzmann Method in Brief} \label{sec:lbmb}
 The basic idea of the lattice Boltzmann is imagine the fluids including gases as a great number of particles that are moving with random states. The particles exchange their momentum and energy by streaming and collision. We can describe the process as the Boltzmann transport equation Equation ~\ref{equ:BTE}:
@@ -324,7 +324,7 @@ In 1992, Qian et al. \cite{d2q9} proposed DdQm ($d$ dimensions, $m$ discrete vel
 
 For each lattice, the distribution function can be thought of as a measure of the probability that the fluid at given position $\mathbf{x}$ has velocity $\mathbf{e}_i$ at time $t$.
 
-As introduced above, in lattice Boltzmann method, the behaviour has been described as the streaming and collision step which are given by Equation~\ref{equ:lbmequ}. In this equation, $fi$ is the distribution function in the direction i; $\tau$ is the relaxation time; $f_i^{eq}$ is the equilibrium distribution function in the direction i; $t$ and $\triangle t$ is the time and the increment of time.
+As introduced above, in lattice Boltzmann method, the behaviour has been described as the streaming and collision step which are given by Equation~\ref{equ:lbmequ}. In this equation, $fi$ is the distribution function in the direction i; $\tau$ is the relaxation factor (reverse time); $f_i^{eq}$ is the equilibrium distribution function in the direction i; $t$ and $\triangle t$ is the time and the increment of time.
 
 \begin{equation}
 \label{equ:lbmequ}
@@ -439,7 +439,7 @@ Finally, according to Minion and Brown's work, when T=0.8, there is a turbulence
 
 \begin{equation}
 \label{timestep}
-    T_{step} = \frac{T h}{U_0 \delta} = \frac{0.8 \times \frac{1}{128}}{0.005 } = 5.12
+    T_{step} = T / \frac{h}{U_0 \delta} = \frac{0.8 \times 0.05}{ \frac{1}{128}}= 5.12
 \end{equation}
 
 In the lattice Boltzmann, we have unit space $h=1$, unit velocity $U_0 \delta = U = 0.0005$. Thus, substitute data into Equation~\ref{timestep}, we get $T_{step} = 2000 (timesteps)$, which means for every dimensionless time unit in Minion and Brown's system, we need 2000 steps to simulate to the same progress. In other words, to witness a turbulence in the lattice Boltzmann system, we need at least $5.12 \times 2000 = 10240$ steps. In the implementation and performance evaluation, we used 12000 steps as a standard; see Fig.~\ref{fig:minion}.\\

@@ -16,7 +16,7 @@
 \begin{abstract}
 
 
-Computational fluid dynamics has a wide range of applications in areas such as Formula 1 racing. However, while some fluid dynamics models such as the lattice Boltzmann method are recognized as easy to parallel, existing parallel hardware techniques receive continued challenges as the requirements of engineers and scientists for CFD simulations increase further. SpiNNaker, a bio-inspired hardware has advantages such as massive parallelism and low power consumption, bring opportunities to CFD simulation. In this project, we take the hardware specificity as an opportunity by porting a CFD algorithm, the lattice Boltzmann method, to the SpiNNaker platform to investigate the scaling ability and compare it with a standard serial implementation on normal CPU. To do this, we: (a) implement a basic lattice Boltzmann method on SpiNNaker platform with over 60,000 cores; (b) demonstrated that the lattice Boltzmann method on the SpiNNaker platform has good performance of speed and advantage in weak-scaling.
+\noindent Computational fluid dynamics has a wide range of applications in areas such as Formula 1 racing. However, while some fluid dynamics models such as the lattice Boltzmann method are recognized as easy to parallel, existing parallel hardware techniques receive continued challenges as the requirements of engineers and scientists for CFD simulations increase further. SpiNNaker, a bio-inspired hardware has advantages such as massive parallelism and low power consumption, bring opportunities to CFD simulation. In this project, we take the hardware specificity as an opportunity by porting a CFD algorithm, the lattice Boltzmann method, to the SpiNNaker platform to investigate the scaling ability and compare it with a standard serial implementation on normal CPU. To do this, we: (a) implement a basic lattice Boltzmann method on SpiNNaker platform with over 60,000 cores; (b) demonstrated that the lattice Boltzmann method on the SpiNNaker platform has good performance of speed and advantage in weak-scaling.
 
 \end{abstract}
 
@@ -26,9 +26,10 @@ Computational fluid dynamics has a wide range of applications in areas such as F
 \renewcommand{\abstractname}{Acknowledgements}
 \begin{abstract}
 
-Acknowledgements
+\noindent Sincerely thanks go to my supervisors: Dr Kevin Stratford and Dr Alan Stokes. This project will not be impossible without their continuous guidance. Thank you to the EPCC people for the online supporting. Thank you to the APT group for building the SpiNNaker. Thank you also to the SpiNNaker User Group. Without the wonderful people from the User Group, it would be even harder during lock-down. Finally, special thanks go to Yuke Li for backing me all the way to the end.
 
 \end{abstract}
+
 
 \newpage
 \tableofcontents
@@ -53,5 +54,10 @@ Acknowledgements
 %\bibliographystyle{ieeetr}
 \bibliographystyle{IEEEtran}
 \bibliography{bibs/references}
+\newpage
+\listoffigures
+
+\newpage
+\listoftables
 
 \end{document}

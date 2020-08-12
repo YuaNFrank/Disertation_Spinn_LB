@@ -81,7 +81,7 @@ Firstly, we need to implement a standard lattice Boltzmann method on CPU as a re
 
 Secondly, we need to choose a pre-defined problem as the test problem from a wide range of the problems. As the test problem, it need to be generic and easy to check the correctness. To choose it, we take LBM model and the boundary condition into consideration, and, finally, a two dimensions and nine vectors (D2Q9) model with a periodic condition problem described by Minion and Brown \cite{minion1997performance} was chosen. It is generic -- D2Q9 model is widely used, and easy to check the correctness -- with the mentioned initial condition, there will be a turbulence in a fix step and we can check it.\\
 
-Then, we can focus on the design and implementation of the LBM on the SpiNNaker.
+Then, we focus on the design and implementation of the LBM on the SpiNNaker. For each step of the LBM, we need to carefully design and implement, especially for the communication in SpiNNaker with the SpiNNaker software stack \cite{software_spinn}. This is also the main part of this project.\\
 
 Finally, after implementing the simulation on SpiNNaker, we will to evaluate correctness and accuracy the simulation result by compare the numbers in quantitatively. After we confirm the correctness, them some experiment would be focus on optimization the communication and bench mark the result with the standard CPU implementation on speed-ups and scalability.\\
 
@@ -93,7 +93,7 @@ The work of this project are threefold:\\
 
  \textbf{A basic lattice Boltzmann implementation on SpiNNaker:} after we implemented the simulation on CPU, we used the CPU implementation as a reference to implement the same simulation on SpiNNaker platform with some of the SpiNNaker software development kit; see Section \ref{sec:dai}\\
 
-\textbf{An investigation on the speed performance and scalability}: we demonstrate that lattice Boltzmann on SpiNNaker platform offers better speed performance in some large scale when compared to CPU and it also has a good scalability on weak-scaling. We bench-marked two implementations of the lattice Boltzmann method scenario: the first one is the standard implementation of on a normal Intel CPU and second one is a implementation on SpiNNaker mentioned above. The observation shows that lattice Boltzmann program can gain 5x speed-up in terms of speed over a certain scale; see Section \ref{sec:eval}.
+\textbf{An investigation on the speed performance and scalability}: we demonstrate that lattice Boltzmann on SpiNNaker platform offers better speed performance in larger scale when compared to CPU and it also has a good scalability on weak-scaling. We bench-marked two implementations of the lattice Boltzmann method scenario: the first one is the standard implementation of on a normal Intel CPU and second one is a implementation on SpiNNaker mentioned above. The observation shows that lattice Boltzmann program can gain  $277.192 / 60.01 = 4.61$ speed-up in terms of speed over a certain scale; see Section \ref{sec:perfe}.
 
 
 

@@ -1,6 +1,19 @@
 \section{Conclusion} \label{sec:conclusion}
 \subsection{Summary} \label{sec:summary}
-In this report, we have illustrate how SpiNNaker hardware can be applied to Computational fluid dynamics problem. More specifically, a basic implementation as well as some communication optimization of lattice Boltzmann method has been discussed. After confirm the correctness and quantify the accuracy of our implementation, we observe a good weak-scaling with the SpiNNaker hardware. Though there is still some limitation, this project build a solid foundation for future's exploration of porting CFD models into SpiNNaker platform.
+
+
+
+
+% In this report, we have illustrate how SpiNNaker hardware can be applied to Computational fluid dynamics problem. More specifically, a basic implementation as well as some communication optimization of lattice Boltzmann method has been discussed. After confirm the correctness and quantify the accuracy of our implementation, we observe a good weak-scaling with the SpiNNaker hardware. Though there is still some limitation, this project build a solid foundation for future's exploration of porting CFD models into SpiNNaker platform.
+% What was easy? What was difficult (compared to e.g., the CPU
+% version)? Is SpiNNaker really a good platform for running
+% such a simulation? Is it easy to develop and debug? Is the
+% communication easy to arrange? Is it easy to measure and
+% understand performance? Lattice Boltzmann is relatively
+% simple (it was selected for this project to be so). What
+% might happen if a more complex model was required?
+
+
 
 
 \subsection{Future Work} \label{sec:future_work}
@@ -9,6 +22,7 @@ SpiNNaker is a good platform for running CFD simulation. In this project, we hav
 The first one is on the CFD side, in this project, we only implement the most basic case in LBM. There are different periodic condition, optimization method yet to implement. Beside, there are still many CFD models that can benefit from SpiNNaker's massive parallelism. Therefore, in the future, more CFD models can be ported to SpiNNaker for performance. 
 
 The second one is on the SpiNNaker side, in this project, we only allocate one lattice per core. Therefore, the simulation scale is very limited. In theory, a SpiNNaker core is able to run over 256 lattices and in the near future this number would be over 1,000. In this case, the SpiNNaker will benefit to with real-world engineering problems.
+
 
 
 

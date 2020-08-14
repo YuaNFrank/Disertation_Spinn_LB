@@ -167,31 +167,31 @@ The lattice Boltzmann method (LBM) as a mesoscopic model set in the between the 
 \subsubsection{Navier-Stokes Equations -- Macroscopic Model} \label{sec:nse}
 In general, a fluid can be viewed as a continuous medium that fills the entire flow field, so that the physical quantities of density, velocity, temperature, etc. can be defined at each point of the flow field and a series of partial differential equations can be established to describe the motion of the fluid. The continuous medium assumption is a fundamental assumption of fluid mechanics and is an approximate treatment of macroscopic fluid structure.\\
 
-Based on the assumption of a continuous medium, the motion of a fluid follows the law of conservation of mass, momentum and energy, which can be mathematically described by a set of partial differential equations Equation.~\ref{equ:NS}:
+Based on the assumption of a continuous medium, the motion of a fluid follows the law of conservation of mass, momentum and energy. In this project, we do not need to consider the temperature (T), energy (E) or heat flux (q). In this case, the system need to meet the conservation of mass and momentum; see Equation~\ref{equ:conservation} and $f$ is the force on the fluid. 
 
-\begin{equation}
-    \left\{\begin{matrix}
-\frac{\partial \rho}{\partial t} + \triangledown \cdot (\rho u) = 0\\ 
-\\
-\frac{\partial (\rho u)}{\partial t} + \triangledown \cdot (\rho u u) = 0\\ 
-\\
-\frac{\partial (\rho u)}{\partial (t) + \triangledown \cdot (\rho u e)} = \sigma : \triangledown u - \triangledown \cdot q
-\end{matrix}\right.
-\label{equ:NS}
-\end{equation}
+% \begin{equation}
+%     \left\{\begin{matrix}
+% \frac{\partial \rho}{\partial t} + \triangledown \cdot (\rho u) = 0\\ 
+% \\
+% \frac{\partial (\rho u)}{\partial t} + \triangledown \cdot (\rho u u) = 0\\ 
+% \\
+% \frac{\partial (\rho u)}{\partial (t) + \triangledown \cdot (\rho u e)} = \sigma : \triangledown u - \triangledown \cdot q
+% \end{matrix}\right.
+% \label{equ:NS}
+% \end{equation}
 
-Here in Equation ~\ref{equ:NS}, $\rho$, $u$, $T$ and $e$ are the density, speed, temperature and internal energy per unit mass, respectively. $\sigma$ is the strain tensor and $q$ is the heat flux from heat transfer and heat radiation.
+% Here in Equation ~\ref{equ:NS}, $\rho$, $u$, $T$ and $e$ are the density, speed, temperature and internal energy per unit mass, respectively. $\sigma$ is the strain tensor and $q$ is the heat flux from heat transfer and heat radiation.
 
-The Equation ~\ref{equ:NS} is not in closed-form. In order to obtain the complete equations, the equations of states need to be supplemented with the relationship between the stress tensor and the rate of deformation tensor, between the heat flow vector and the temperature gradient, and with the thermodynamic properties of the associated thermodynamic properties. For Newtonian fluids, the stress tensor is linearly related to the deformation rate tensor and can be expressed as, where $I$ is the second-order unit tensor, $p$ is the static pressure, $\tau = 2 \mu S + \lambda(\triangledown \cdot u)I$ is the viscous stress tensor, where $\mu$ is the dynamic viscosity coefficient, $\lambda$ is the second viscosity coefficient, $S$ is the deformation coefficient tensor, and $a$ and $b$ is the index of the tensor which is defined as Equation~\ref{equ:DCT}:
+% The Equation ~\ref{equ:NS} is not in closed-form. In order to obtain the complete equations, the equations of states need to be supplemented with the relationship between the stress tensor and the rate of deformation tensor, between the heat flow vector and the temperature gradient, and with the thermodynamic properties of the associated thermodynamic properties. For Newtonian fluids, the stress tensor is linearly related to the deformation rate tensor and can be expressed as, where $I$ is the second-order unit tensor, $p$ is the static pressure, $\tau = 2 \mu S + \lambda(\triangledown \cdot u)I$ is the viscous stress tensor, where $\mu$ is the dynamic viscosity coefficient, $\lambda$ is the second viscosity coefficient, $S$ is the deformation coefficient tensor, and $a$ and $b$ is the index of the tensor which is defined as Equation~\ref{equ:DCT}:
 
-\begin{equation}
-    \label{equ:DCT}
-        S_{a b} = \frac{1}{2} (\frac{\partial u_a}{\partial x_b} + \frac{\partial u_b}{\partial x_a})
-\end{equation}
+% \begin{equation}
+%     \label{equ:DCT}
+%         S_{a b} = \frac{1}{2} (\frac{\partial u_a}{\partial x_b} + \frac{\partial u_b}{\partial x_a})
+% \end{equation}
 
-Under the Stokes' hypothesis \cite{gad1995stokes}, the two types of viscosity coefficients are related by: $\lambda + (2/3)\mu = 0$. By applying the Stokes' hypothesis, the Equation ~\ref{equ:NS} can be called Navier-Stokes equations \cite{lbmmbook}. \\
+% Under the Stokes' hypothesis \cite{gad1995stokes}, the two types of viscosity coefficients are related by: $\lambda + (2/3)\mu = 0$. By applying the Stokes' hypothesis, the Equation ~\ref{equ:NS} can be called Navier-Stokes equations \cite{lbmmbook}. \\
 
-In this project, we do not need to consider the temperature (T), energy (e) or heat flux (q). In this case, the system need to meet the conservation of mass and momentum; see Equation~\ref{equ:conservation} and $f$ is the force on the fluid. 
+
 
 \begin{equation}
     \label{equ:conservation}
@@ -379,15 +379,16 @@ In the Minion and Brown's problem, the initial velocity $u$ is defined as Equati
 \begin{equation}
 \label{equ:init_u}
     \begin{matrix}
-u = tanh(k (y-0.25)) & y \leqslant 0.5 \\ 
-u = tanh(k (0.75-y)) & y > 0.5  \\
+    
+u = \mathrm{tanh}(k (y-0.25)) & y \leqslant 0.5 \\ 
+u = \mathrm{tanh}(k (0.75-y)) & y > 0.5  \\
 v = \delta sin(2\pi x )
 \end{matrix}
 \end{equation}
 
 \begin{figure}[!tb]
    \centering
-       \includegraphics[width=0.5\textwidth]{figures/Voriticity_contour_128_128_c.png}
+       \includegraphics[width=0.9\textwidth]{figures/double_c_256.png}
        \caption{Vorticity contour from the Minion and Brown's problem\cite{minion1997performance} setting  for resolution 128 $\times$ 128, number of contours being 20. Layer width parameter $\rho = 30$, viscosity $v=1/10,000$. }
        \label{fig:minion}
 \end{figure}
@@ -402,8 +403,8 @@ After calculate the Reynolds number of the Minion and Brown's work. We can adjus
 \begin{equation}
 \label{equ:init_u_lbm}
     \begin{matrix}
-u = U_0tanh(k (y-0.25L)) & y \leqslant 0.5 \\ 
-u = U_0tanh(k (0.75L-y)) & y > 0.5  \\
+u = U_0\mathrm{tanh}(k (y-0.25L)) & y \leqslant 0.5 \\ 
+u = U_0\mathrm{tanh}(k (0.75L-y)) & y > 0.5  \\
 v = \delta sin(2\pi x )
 \end{matrix}
 \end{equation}

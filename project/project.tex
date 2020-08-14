@@ -49,7 +49,7 @@ After all the data are acquired, we get then reserve corresponding memory and wr
 \begin{figure}[tb]
    \centering
        \includegraphics[width=1\textwidth]{figures/write_data.png}
-       \caption{A lattice cell A connected by another lattice B via a lattice edge with the compass being "W". The lattice A then can get the routing key from its pre\_vertex, B.}
+       \caption{The diagram of the implementation of the lattice cell and data specification. In the lattice cell, we define the data regions in Python and the SpiNNaker runtime will interpret our scripts and reserve corresponding memory. In C source file, the lattice cell would read the data from the SDRAM before the simulation.}
        \label{fig:write_data}
 \end{figure}
 
@@ -191,7 +191,7 @@ Then we have to consider the multicast packets each lattice need. As we discusse
        \caption{A lattice acquire the distribution function of its 8 neighbours from multicast packets as it post distribution function $f_i^{*}$. For every streaming step, the lattice will receive $8\times8=64$ packets.}
        \label{fig:spinn_receive}
    \end{subfigure}
-   \caption{How a lattice send it distribution function $f_i$ (\ref{fig:spinn_send}) and hot it acquire the post distribution function ($f_i^{*}$) from the arriving multicast packets from its neighbours (\ref{fig:spinn_receive}).}
+   \caption{Tha diagram of communication implementation of LBM on SpiNNaker. On the sender side (a), the lattice need to send the distribution function as 8 multicast packets; on the receiver side (b), the lattice need to collect 64 packets from it neighbours and extract the post-distribution function from the payloads.}
 \end{figure}
 
 However, not all 64 multicast packets are necessary for a lattice. From each direction, the lattice only needs the corresponding one distribution function. In other words, the lattice only needs one multicast packet from one direction. Therefore, a lattice only actually need eight multicast packets though it still needs to acquire all 64 packets to know which are eight packets it needs.\\

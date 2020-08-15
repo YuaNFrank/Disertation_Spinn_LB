@@ -18,12 +18,12 @@ Across the project, the most straightforward part is porting the computation ste
 
 Though the development is becoming straightforward as the developers are getting more familiar with the APIs, debugging is always painful as the other parallel programming techniques. What make debugging even more time-consuming is that when the simulation scale is large the developers have to wait for the long-time data loading for a single round of debugging. Besides, the developers need to take care at both the front end scripts in Python and source code in C, which make the debugging even more complex. \\
 
-Though we achieve a relatively good performance from a LBM model on SpiNNaker. Multicast may not be a perfect match for LBM. In lattice Boltzmann method, a lattice only need one distribution function from a neighbour in one direction, where a point-to-point communication is more suitable.\\
+Though we achieve a relatively good performance from a LBM model on SpiNNaker. Multicast may not be a perfect match for LBM. In lattice Boltzmann method, a lattice only need a distribution function in one direction from a neighbour in the same direction, where a point-to-point communication is more suitable.\\
 
-Lattice Boltzmann method is a relatively simple model compared with other CFD models and it has been proven that SpiNNaker is capable of LBM simulation. However, the ITCM in SpiNNaker core is limited, only 32kB, and when porting a more complex CFD model to the SpiNNaker platform, the size of ITCM would be a hindrance. \\
+Lattice Boltzmann method is a relatively simple model compared with other CFD models and it has been proven that SpiNNaker is capable of LBM simulation. However, the ITCM in SpiNNaker core is limited, only 32kB, and, therefore, when porting a more complex CFD model to the SpiNNaker platform, the size of ITCM would be a hindrance. \\
 
  
-
+In conclusion, this project introduces the SpiNNaker platform to the CFD field and proves that SpiNNaker can be used as a parallel computer for CFD achieving a good performance in term of speed. This project lays a solid foundation for the large-scale simulation in CFD field of SpiNNaker and hopefully this will lead to projects conquering real-world engineering problems in the near future.
 
 
 \subsection{Future Work} \label{sec:future_work}

@@ -32,7 +32,7 @@ To make the results more plausible, we took the tie value for three executions f
 \subsection{Correctness and Accuracy Evaluation} \label{sec:caae}
 Firstly, we can get an general judgement on the correctness from the vorticity contour. In Fig.~\ref{fig:contour}, Fig.~\ref{fig:a},Fig.~\ref{fig:c} and Fig.~\ref{fig:e} is produced from the serial C implementation in double floating precise. According to \cite{minion1997performance}, with its configuration, there would be a turbulence in the periodic system. It is clear that there are turbulence in all three scale. Turbulence is recognized as a complex system and if there is any small error during the calculation, eventually, the result would be markedly different. In this case, we got a similar turbulence as \cite{minion1997performance}; and now We are confident enough that our serial implementation is correct.\\
 
-On the left hand side of Fig.~\ref{fig:contour}, we have the contour result from the SpiNNaker implementation. It is clear that the result from the SpiNNaker implementation has similar contours as the serial C implementation. We can now say that our implementation is correct. However, CFD need accuracy and if we want to know how accurate our simulation is, we need to analysis the result numerically.\\
+On the left hand side of Fig.~\ref{fig:contour}, we have the contour result from the SpiNNaker implementation. It is clear that the result from the SpiNNaker implementation has similar contours as the serial C implementation. And it is noticeable that there are some noises in low-resolution contour i.e.$64\times64$ simulation and the noises decreases when the resolution increase, which fits what we were expecting before the simulation. We can now say that our implementation is correct. However, CFD need accuracy and if we want to know how accurate our simulation is, we need to analysis the result numerically.\\
 
 \begin{figure}[htbp]  
 \begin{subfigure}{0.43\textwidth}
@@ -106,7 +106,7 @@ It is noticeable that in SpiNNaker $128\times128$ simulation and $256\times256$ 
 
 
 \subsection{Limitation Evaluation} \label{sec:ana}
-The first limitation is from the device itself. In the previous performance analysis, we only take the time spend on \textbf{simulation}, which means we do not take the non-simulation time ,e.g. booting the machine, loading data specification to the device, loading data back to host etc., into account. In fact, with the increasing scale of the simulation, the time spend on the non-simulation tasks become larger; see \ref{fig:loading}.\\
+The first limitation is from the device itself. In the previous performance analysis, we only take the time spend on \textbf{simulation}, which means we do not take the non-simulation time ,e.g. booting the machine, loading data specification to the device, loading data back to host etc., into account. In fact, with the increasing scale of the simulation, the time spend on the non-simulation tasks become larger; see Fig.~\ref{fig:loading}.\\
 
 \begin{figure}[tb]
    \centering

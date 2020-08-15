@@ -12,7 +12,7 @@ Fluid is everywhere, from the air we breath, the water we drink to the wind flow
     \label{fig:cfd_market}
 \end{figure}
 
-As the definition says, CFD highly rely on computers, especially high-performance computers (HPC). Indeed, quite an objective part of HPC resource also goes to fluid dynamics simulation; see \ref{fig:break_down}. However, the simulation is becoming more demanding, and the CFD poses new challenges to HPC every year. For example, Formula 1 racing teams give high priority to aerodynamics simulation and they always want to make as much simulation as possible within a short period of time. If they want to beat the other F-1 teams in the aerodynamics, they need to run simulation faster in a more powerful supercomputer while the Fédération Internationale de l'Automobile (FIA) start to limit the power consumption of the CFD simulation \cite{formula1} of F-1 teams. Engineers like them from all areas face the similar challenge and they need to figure out a feasible way.
+As the definition says, CFD highly rely on computers, especially high-performance computers (HPC). Indeed, quite an objective part of HPC resource also goes to fluid dynamics simulation; see \ref{fig:break_down}. However, the simulation is becoming more demanding, and the CFD poses new challenges to HPC every year. For example, Formula 1 racing teams give high priority to aerodynamics simulation and they always want to run as much simulation as possible within a short period of time. If they want to beat the other F-1 teams in the aerodynamics, they need to run simulation faster in a more powerful supercomputer while the Fédération Internationale de l'Automobile (FIA) start to limit the power consumption of the CFD simulation \cite{formula1} of F-1 teams. Engineers like them from all areas face the similar challenge and they need to figure out a feasible way.
 
 \begin{figure}[!tb]
     \centering
@@ -40,7 +40,7 @@ As the definition says, CFD highly rely on computers, especially high-performanc
 % \item \textbf{Communication throughput}: extra performance might be gain from the reduce of the message size and more message can be process in the same amount of time\cite{furber2012overview}. Their link can transfer up to 31.25M byte/s, which means the links can handle 3M packets per second \cite{ws6}.\\
 % \end{itemize}
 
-Meanwhile, some neuromorphic hardware has been actively developed during the same period of time. SpiNNaker is one of them. SpiNNaker (Spiking Neural Network Architecture) \cite{thespinnbible} is an approach to build a machine that is based to some degree on what is understood about the principles of operation of the human brain. It has the following hardware features:
+Meanwhile, some neuromorphic hardware has been actively developed during the same period of time. SpiNNaker (Spiking Neural Network Architecture) is one of them. SpiNNaker  \cite{thespinnbible} is an approach to build a machine that is based to some degree on what is understood about the principles of operation of the human brain. It has the following hardware features:
 \begin{itemize} 
 \item \textbf{Massively parallel:} A single type Spinn-5 SpiNNaker board has 48 SpiNNaker chips. Each SpiNNaker chip has 18 ARM cores, which means the board has up to $48 \times 18 = 864$ cores. Each core has the ability to simulate at least 256 neurons. The SpiNNaker clusters are build with cabinets of boards. The SpiNNaker can bring massive parallelism.
 
@@ -50,7 +50,7 @@ Meanwhile, some neuromorphic hardware has been actively developed during the sam
 \end{itemize}
 
 
-In a word, the SpiNNaker has the full features as a supercomputer and it could provide new opportunities for parallel software engineers and CFD engineers. However, there is not much scientific applications developed on SpiNNaker especially CFD applications. In this project, we will explore the potential of using SpiNNaker for CFD simulation and trying to achieve a good performance in terms of speed.\\
+In a word, the SpiNNaker has the full features as a supercomputer and it could provide new opportunities for parallel software engineers and CFD engineers. However, there is not much scientific applications developed on SpiNNaker, especially CFD applications. In this project, we will explore the potential of using SpiNNaker for CFD simulation and trying to achieve a good performance in terms of speed.\\
  
 % On the other side, Computational fluid dynamics (CFD) is a science that, with the help of digital computers, produces quantitative predictions of fluid-flow phenomena based on the conservation laws (conservation of mass, momentum, and energy) governing fluid motion \cite{thelbmbible}. It help us to to solve real-world engineering problems, including aerospace engineering, meteorology, etc. However, CFD algorithm usually involve heavy computation. To get the simulation result in affordable time, scientists and engineers need to accelerate the simulation. Therefore, parallel computers including some supercomputers are heavily used for CFD simulation.\\
 

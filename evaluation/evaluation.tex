@@ -1,9 +1,9 @@
 \section{Result and Evaluation} \label{sec:eval}
 This section discuss the result of the simulation with our implemented lattice Boltzmann method on SpiNNaker. Firstly, the evaluation setup (\ref{sec:es}) including the serial version and SpiNNaker version would be discussed. Then we will discuss the correctness and the accuracy of simulation in different scale at \ref{sec:caae}. Then we will compare the performance in term of speed with the serial implementation in CPU at \ref{sec:perfe}.
 \subsection{Evaluation Setup} \label{sec:es}
-In this project, we used a serial implementation of the test problem in C as the baseline. The serial version would be run on EPCC's facility Cirrus (Intel Xeon E5-2695 (Broadwell)), with no compiler optimization.\\
+In this project, we used a serial implementation of the test problem in C as the baseline. The serial version run on EPCC's computing facility Cirrus (Intel Xeon E5-2695 (Broadwell)), with no compiler optimization.\\
 
-On the SpiNNaker side, we run our simulation on the SpiNNaker cluster in the University of Manchester, which contains 1,036,800 cores via the SpiNNaker Jupyter Notebook interface. \\
+On the SpiNNaker side, we run our simulation on the SpiNNaker cluster in the University of Manchester, which contains 1,036,800 cores, via the SpiNNaker Jupyter Notebook interface. \\
 
 For evaluation, we use three different scale of simulation; see \ref{table:setting}. We will firstly plot the contour graph of the result of those three simulation. Those simulation indicate the same problem but in different resolution. Then we will use the normalized distances L-1 norm, L-2 norm and L-infinite norm  of (1) SpiNNaker version vs. Serial float version; (2) SpiNNaker version vs. Serial double version; (3) Serial float version vs. Serial double version to discuss the correctness and the accuracy of our SpiNNaker implementation.\\
 
@@ -26,13 +26,13 @@ For performance, in this project, we focus on speed. To more visually compare th
 
 It should be noted that, in SpiNNaker, we do not take the time spend on loading SpiNNaker hardware configuration into account for the above comparison. We will discuss it as well as other limitation of this implementation in more detail at \ref{sec:ana}.\\
 
-Finally, an analysis would be given to the difficulty we faced during this project, including some technical difficulties and some general difficulties caused by the COVID-19.
+Finally, an analysis would be given to the challenge we faced during this project, including some technical difficulties and some general difficulties caused by the COVID-19.
 
 To make the results more plausible, we took the tie value for three executions for every result.\\
 \subsection{Correctness and Accuracy Evaluation} \label{sec:caae}
 Firstly, we can get an general judgement on the correctness from the vorticity contour. In Fig.~\ref{fig:contour}, Fig.~\ref{fig:a},Fig.~\ref{fig:c} and Fig.~\ref{fig:e} is produced from the serial C implementation in double floating precise. According to \cite{minion1997performance}, with its configuration, there would be a turbulence in the periodic system. It is clear that there are turbulence in all three scale. Turbulence is recognized as a complex system and if there is any small error during the calculation, eventually, the result would be markedly different. In this case, we got a similar turbulence as \cite{minion1997performance}; and now We are confident enough that our serial implementation is correct.\\
 
-On the left hand side of \ref{fig:contour}, we have the contour result from the SpiNNaker implementation. It is clear that the result from the SpiNNaker implementation has similar contours as the serial C implementation. We can now say that our implementation is correct. However, CFD need accuracy and if we want to know how accurate our simulation is, we need to analysis the result numerically.\\
+On the left hand side of Fig.~\ref{fig:contour}, we have the contour result from the SpiNNaker implementation. It is clear that the result from the SpiNNaker implementation has similar contours as the serial C implementation. We can now say that our implementation is correct. However, CFD need accuracy and if we want to know how accurate our simulation is, we need to analysis the result numerically.\\
 
 \begin{figure}[htbp]  
 \begin{subfigure}{0.43\textwidth}
@@ -96,11 +96,11 @@ After quantifying the correctness and the accuracy, we now have a reasonably cor
 \begin{figure}[tb]
    \centering
        \includegraphics[width=0.8\textwidth]{figures/SpiNNaker vs. Serial C with double.png}
-       \caption{Execution time of 12000 time steps in scale of $64\times64$, $128\times128$ and $256\times256$ with SpiNNaker implementation and serial implementation.}
+       \caption{Execution time of 12000 time steps in scale of $64\times64$, $128\times128$ and $256\times256$ with SpiNNaker implementation and serial implementation. It should note that the SpiNNaker's performance may not be optimal in this case.}
        \label{fig:performance}
 \end{figure}
 
-As Fig.~\ref{fig:performance} shows, as the size of the simulation increases, the execution time of the serial program increases rapidly. When the simulation size is small, the serial program executes more efficiently than SpiNNaker; however, as the task size increases, the SpiNNaker naturally implementation utilizes more cores and gets better performance accordingly. For $128\times128$ simulation, the SpiNNaker gain $277.192 / 60.01 = 4.61$ speed-up. With this implementation and hardware, we achieve a relatively good weak-scaling performance.\\
+As Fig.~\ref{fig:performance} shows, as the size of the simulation increases, the execution time of the serial program increases rapidly. When the simulation size is small, the serial program executes more efficiently than SpiNNaker; however, as the task size increases, the SpiNNaker naturally implementation utilizes more cores and gets better performance accordingly. For $128X\times128=16384$ simulation, the speed-up is $60.01/68.224\approx1$, while for $256\times256=65536$ simulation, the SpiNNaker gain $277.192 / 60.01 = 4.61$ speed-up. As the simulation scale increase by $65536 / 16384 = 4$ times, the speed-up increase $4.61 / 1 = 4.61$ times. Therefore, as the With this implementation and hardware, we achieve a relatively good weak-scaling performance.\\
 
 It is noticeable that in SpiNNaker $128\times128$ simulation and $256\times256$ simulation need the same amount of time. This is because: (1) in this project, we only allocate 1 lattice per core. And as the scale of simulation increase, the SpiNNaker implementation will correspondingly increased use of cores; (2) in this project, we have not yet get the optimal performance of SpiNNaker, especially for $128\times128$ simulation. To get a better performance, we are supposed to adjust the SpiNNaker configuration, e.g. timer offset, time scale factor, delay between multicast, really carefully, which need time that beyond the scope of this project.
 
@@ -121,8 +121,14 @@ Another limitation is that, in this project, we only allocate 1 lattice per SpiN
 
 Finally, we are using the time ticker of SpiNNaker as a trigger of time step. Indeed, it is convenient for a basic implementation. However, the developers need to adjust the timer offset, timing information and maximum of delay between sending the multicast packets really carefully to get a good performance. Especially for larger simulation, e.g. 256$\times$256 simulation in this project, since we are not running simulation on the exactly same cores each time and the physical communication time is not the same from cores to cores, it was time-consuming to find a proper setting.\\
 
-\subsection{Difficulty Evaluation}
-The very first difficulty we faced is SpiNNaker itself. SpiNNaker is a novel architecture with a totally different programming model even for parallel programmers. Getting familiar with the ideas behind SpiNNaker is difficult and one of the difficulties in programming on SpiNNaker is the idea of event-driven asynchronized multicast communication in SpiNNaker. We have discussed this kind of difficulty in the project preparation but the actual hard is beyond our imagine.\\
+\subsection{Challenge Evaluation}
+The very first challenge we faced is SpiNNaker itself. SpiNNaker is a novel architecture with a totally different programming model even for parallel programmers. Getting familiar with the ideas behind SpiNNaker is difficult and one of the difficulties in programming on SpiNNaker is the idea of event-driven asynchronized multicast communication in SpiNNaker. We have predicted it would be difficult in the project preparation but the actual difficulty is beyond our imagine.\\
 
-Another difficulty is implementing a lattice Boltzmann method in C as a baseline. Since
+The second challenge comes from the lock-down caused by the COVID-19. Since SpiNNaker is at the forefront of academia, there is not much discussion about SpiNNaker on the web. Trying to get resources on SpiNNaker relies heavily on talking to Dr Alan Stokes, one of my mentors. However, lock-down has made Alan, who was originally accessible 3 days a week, available on a weekly basis. This makes acquiring prior knowledge about SpiNNaker so hard that I need to turn to the SpiNNaker user group frequently, even though the people in the SpiNNaker user group are great, and this delays the project. \\
+
+The last and most significant challenge across this project comes from the physical board. As we discussed before this report, this project should have proposed an early prototype and then switch to the SpiNNaker cluster for larger simulation. However, the physical board came across some connection problems and for the development efficiency, we directly switch to the Jupyter interface. If there is no lock-down, the repair would be available and the development should be more efficient as it is more straightforward to debug locally and we do not need to compete with the other users and researchers for SpiNNaker cluster usage. The spared time can be used as adjusting the parameters for a better performance or development the multi-lattice-single-core implementation.
+
+
+
+
 

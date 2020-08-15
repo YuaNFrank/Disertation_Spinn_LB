@@ -1,7 +1,7 @@
 \section{Background} \label{sec:bg}
 
 
-This section will provide a basic background information of SpiNNaker including an overall comparison between SpiNNaker and CPU in HPC(\ref{sec:sa}), hardware architecture (\ref{sec:sa}) and SpiNNaker software stack (\ref{sec:sss}). Then this section will explain some important conceptions in physics (\ref{sec:PB}) about the lattice Boltzmann method: why it is necessary and how it works. 
+This section will provide a basic background information of SpiNNaker including an overall comparison between SpiNNaker and CPU in HPC(\ref{sec:sa}), hardware architecture (\ref{sec:sa}) and SpiNNaker software stack (\ref{sec:sss}). Then this section will explain some important conceptions in physics (\ref{sec:PB}) about the lattice Boltzmann method: why it is necessary and how it works. \\
 
 
 % \subsection{History in a Nutshell} \label{sec:sb}
@@ -26,7 +26,7 @@ This section will provide a basic background information of SpiNNaker including 
 % \end{figure}
 
 \subsection{An Overall Comparison} \label{sec:sb}
-SpiNNaker is a novel hardware architecture that people rarely have opportunity to access it. To give an overall idea of SpiNNaker for programmers who are more familiar with multi-processor programming with CPU, especially MPI in HPC field. We will compare them briefly as following:
+SpiNNaker is a novel hardware architecture that people rarely have opportunity to access it. To give an overall idea of SpiNNaker for programmers who are more familiar with multi-processor programming with CPU, especially MPI in HPC field. We will compare them briefly as following:\\
 
 \begin{itemize}
     \item \textbf{Operating System:} While most HPC facilities have full-feature operating system (mostly Linux), SpiNNaker works as connected device (like GPU). 
@@ -43,7 +43,7 @@ SpiNNaker is a novel hardware architecture that people rarely have opportunity t
 In this subsection, we will illustrate the basic architecture of the SpiNNaker.
 \subsubsection{SpiNNaker Core} \label{sec:ca}
 
-Fig.~\ref{fig:spinn-core} is an diagram of ARM968 core used in SpiNNaker hardware. Being different from the most cores in the PCs or supercomputer running at $\sim GHz$, ARM968 is a medium-performance computing unit running at 200MHz with 220 DMIPS \cite{furber2012overview}. There are two very limited tightly coupled memory (TCM) blocks: a 64 Kbytes of data tight-coupled memory (DTCM) block and a 32 Kbytes of instruction tight-coupled memory (ITCM) block; see Fig.~\ref{fig:arm_968}. Other controllers including direct memory access (DMA) controller, communication controller, vectored interrupt controller are also built in. A major difference from the most cores in the market is that the ARM968 core do not have floating-point hardware and use fixed-point arithmetic instead. Though it might be more energy-efficient, it bring greater challenge to programmers \cite{furber2012overview}. Luckily, a software floating-point arithmetic is supported, though the performance will be slower and more memory-hungry \cite{spin-chip-resources}.
+Fig.~\ref{fig:arm_968} is an diagram of ARM968 core used in SpiNNaker hardware. Being different from the most cores in the PCs or supercomputer running at $\sim GHz$, ARM968 is a medium-performance computing unit running at 200MHz with 220 DMIPS \cite{furber2012overview}. There are two very limited tightly coupled memory (TCM) blocks: a 64 Kbytes of data tight-coupled memory (DTCM) block and a 32 Kbytes of instruction tight-coupled memory (ITCM) block; see Fig.~\ref{fig:arm_968}. Other controllers including direct memory access (DMA) controller, communication controller, vectored interrupt controller are also built in. A major difference from the most cores in the market is that the ARM968 core do not have floating-point hardware and use fixed-point arithmetic instead. Though it might be more energy-efficient, it bring greater challenge to programmers \cite{furber2012overview}. Luckily, a software floating-point arithmetic is supported, though the performance will be slower and more memory-hungry\\ \cite{spin-chip-resources}.
     \begin{figure}[!tb]
    \centering
        \includegraphics[width=1\textwidth]{figures/core.png}
@@ -52,7 +52,7 @@ Fig.~\ref{fig:spinn-core} is an diagram of ARM968 core used in SpiNNaker hardwar
     \end{figure}
 
 \subsubsection{Network Topology}
-Before we talk about how the SpiNNaker cores communicate, we need to illustrate how they are connected with its network topology.
+Before we talk about how the SpiNNaker cores communicate, we need to illustrate how they are connected with its network topology.\\
 
 In a SpiNNaker board, SpiNNaker chips are organized as a 2-dimension mesh network with bidirectional links to their six neighbours \cite{testchip}; see Fig.~\ref{fig:topology}. The cores sit on the border are connected with cores on the other end of the board.
 
@@ -77,7 +77,7 @@ It should be pointed out that in actual development the payload of the multicast
 \label{fig:multicast}
 \end{figure}
 
-As we discussed before, \textbf{the multicast communication in SpiNNaker do not guarantee the delivery}, and as a consequence, the packets might be drop at any time. Luckily, the re-injector will re-inject the dropped packets if there is any. However, it is still possible to drop packets during communication. When there is intensive message-passing, with a high peak packets rate, there would be back pressure and packet collision. We will discuss the difficulty and solution at Section~\ref{sec:co}.\\
+As we discussed before, \textbf{the multicast communication in SpiNNaker do not guarantee the delivery}, and as a consequence, the packets might be drop at any time. Indeed, the re-injector will re-inject the dropped packets if there is any. However, it is still possible to drop packets during communication. When there is intensive message-passing, causing a high peak packets rate, there would be back pressure and packet collision, which will high lead to packet dropping. We will discuss how it influence this project as well as our solution at Section~\ref{sec:co}.\\
 
 
 \subsection{SpiNNaker Software Stack } \label{sec:sss}
@@ -96,7 +96,6 @@ The actual communication of each vertex is defined via the \textit{Spin1} API in
 
 Sitting on the lowest layer of the software stack, the SpiNNaker application runtime kernel (\textit{SARK}) support the runtime system of the SpiNNaker core. We will not touch software in such low layer in this project.\\
 
-
 \subsection{Development Environment for SpiNNaker} \label{sec:impl}
 There are many ways to access the SpiNNaker hardware. In this project, two methods were applied. This section will briefly discuss the advantages and disadvantages of those two method and why we changed the access method.\\
 
@@ -107,10 +106,9 @@ One of the advantages of development with a SpiNNaker Board is that the develope
 
 There are some disadvantages though. A major disadvantage is that it is the developers' duty to maintain the development condition of the SpiNNaker board including the Ethernet connection, electronic power and the condition of the SpiNNaker board itself. Most SpiNNaker users are not professional electronic engineers, so if there is any trouble with those problem, the developers must try to get help from the SpiNNaker team or they are on their own. \\
 
-\begin{figure}
-\centering
+\begin{figure}[tb]
    \centering
-       \includegraphics[width=0.8\textwidth]{figures/laptop.png}
+       \includegraphics[width=0.7\textwidth]{figures/laptop.png}
        \caption{Development with Directed Connected Board via Ethernet switch ( board image from \cite{spinn-core}). Developers need a physical board, but they can use their desirable development environment.}
        \label{fig:laptop}
 \end{figure}
@@ -386,9 +384,9 @@ v = \delta sin(2\pi x )
 \end{matrix}
 \end{equation}
 
-\begin{figure}[!tb]
+\begin{figure}[tb]
    \centering
-       \includegraphics[width=0.9\textwidth]{figures/double_c_256.png}
+       \includegraphics[width=0.7\textwidth]{figures/double_c_128.png}
        \caption{Vorticity contour from the Minion and Brown's problem\cite{minion1997performance} setting  for resolution 128 $\times$ 128, number of contours being 20. Layer width parameter $\rho = 30$, viscosity $v=1/10,000$. }
        \label{fig:minion}
 \end{figure}
